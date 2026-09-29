@@ -1,5 +1,7 @@
 import os
 import json
+from uninformed import bfs, dfs, ucs, ids
+from informed import a_star, greedy_best_first
 from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
@@ -46,13 +48,29 @@ def search():
     start = payload.get("start", "")
     goal = payload.get("goal", "")
     algorithm = payload.get("algorithm", "")
+    data= load_map_data()
+    result = {"path": [], "distance": 0, "expanded": []}
+    if algorithm == "bfs":
+        result = bfs(data, start, goal)
+    elif algorithm == "dfs":
+            result = dfs(data, start, goal)
+    elif algorithm == "ucs":
+            result = ucs(data, start, goal)
+    elif algorithm == "ids":
+            result = ids(data, start, goal)
+    elif algorithm == "astar":
+                result = a_star(data, start, goal)
+    elif algorithm == "greedy":
+                result = greedy_best_first(data, start, goal)
 
+    print("Algorithm received:", algorithm)
     return jsonify({
         "status": "ready",
         "message": f"Deployment server active. Request received for algorithm '{algorithm}' from '{start}' to '{goal}'.",
-        "path": [],
-        "cost": 0,
-        "nodes_expanded": 0
+        "path": result["path"],
+        "cost": result["distance"],
+        "nodes_expanded": len(result["expanded"])
+        
     })
 
 

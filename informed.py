@@ -6,7 +6,7 @@ def haversine(coord1, coord2):
     Calculate the great-circle distance between two points
     on the Earth's surface in kilometers.
     """
-    R = 6371.0  # Earth radius in kilometers
+    R = 3958.8  
     
     lat1, lon1 = math.radians(coord1["lat"]), math.radians(coord1["lon"])
     lat2, lon2 = math.radians(coord2["lat"]), math.radians(coord2["lon"])
@@ -24,9 +24,9 @@ def greedy_best_first(graph, start, goal):
     Greedy Best-First Search
     Returns: {"path": list, "expanded": list, "distance": float}
     """
-    nodes_coords = graph.get("nodes", {})
+    nodes_coords = graph.get("locations", {})
     if start not in nodes_coords or goal not in nodes_coords:
-        return {"path": None, "expanded": [], "distance": 0.0}
+        return {"path": [], "expanded": [], "distance": 0.0}
         
     goal_coord = nodes_coords[goal]
     
@@ -51,25 +51,23 @@ def greedy_best_first(graph, start, goal):
         if node == goal:
             return {"path": path, "expanded": expanded, "distance": round(cost, 2)}
             
-        neighbors = sorted(graph.get("connections", {}).get(node, []), key=lambda x: x["node"])
-        for neighbor in neighbors:
-            n_name = neighbor["node"]
-            n_dist = neighbor["distance"]
+        neighbors = graph.get("graph", {}).get(node, {})
+        for n_name, n_dist in sorted(neighbors.items()):
             if n_name not in visited:
                 counter += 1
                 h_val = haversine(nodes_coords[n_name], goal_coord)
                 heapq.heappush(pq, (h_val, counter, n_name, path + [n_name], cost + n_dist))
                 
-    return {"path": None, "expanded": expanded, "distance": 0.0}
+    return {"path": [], "expanded": expanded, "distance": 0.0}
 
 def a_star(graph, start, goal):
     """
     A* Search
     Returns: {"path": list, "expanded": list, "distance": float}
     """
-    nodes_coords = graph.get("nodes", {})
+    nodes_coords = graph.get("locations", {})
     if start not in nodes_coords or goal not in nodes_coords:
-        return {"path": None, "expanded": [], "distance": 0.0}
+        return {"path": [], "expanded": [], "distance": 0.0}
         
     goal_coord = nodes_coords[goal]
     
@@ -94,10 +92,8 @@ def a_star(graph, start, goal):
         if node == goal:
             return {"path": path, "expanded": expanded, "distance": round(g_cost, 2)}
             
-        neighbors = sorted(graph.get("connections", {}).get(node, []), key=lambda x: x["node"])
-        for neighbor in neighbors:
-            n_name = neighbor["node"]
-            n_dist = neighbor["distance"]
+        neighbors = graph.get("graph", {}).get(node, {})
+        for n_name, n_dist in sorted(neighbors.items()):
             if n_name not in visited:
                 counter += 1
                 g_new = g_cost + n_dist
@@ -105,4 +101,4 @@ def a_star(graph, start, goal):
                 f_new = g_new + h_val
                 heapq.heappush(pq, (f_new, counter, n_name, path + [n_name], g_new))
                 
-    return {"path": None, "expanded": expanded, "distance": 0.0}
+    return {"path": [], "expanded": expanded, "distance": 0.0}
