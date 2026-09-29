@@ -16,7 +16,7 @@
 ---
 
 ## Section 1: Selected City Region
-- **Selected Region:** [Write your selected region here (must be a USA-based region, e.g., a US state or city region)]
+- **Selected Region:** Illinois, USA
 - Chicago, IL  
 - Aurora, IL  
 - Naperville, IL  
@@ -61,8 +61,8 @@
 ---
 
 ## Section 4: Deployed and Presentation Information
-- **Deployment Platform:** [Write your deployment platform here, e.g., Render]
-- **Live Deployment URL:** [Provide your live deployment site URL here]
+- **Deployment Platform:** Render
+- **Live Deployment URL:** https://project-1-ih5b.onrender.com
 - **Video Presentation Link:** [Provide an accessible link to your 5–7 minute video presentation]
 
 ---
